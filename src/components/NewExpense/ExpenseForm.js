@@ -10,13 +10,30 @@ const ExpenseForm = () => {
         enteredTitle: '',
         enteredAmount: '',
         enteredDate: ''
-    })
+    });
 
     const titleChangeHandler = (event) => {
-        // setEnteredTitle(event.target.value);
-        setUserInput({
-            ...userInput,
-            enteredTitle: event.target.value
+        // approach 1
+        // setEnteredTitle(event.target.value); 
+
+        // approach 2
+        // setUserInput({
+        //     ...userInput,
+        //     enteredTitle: event.target.value
+        // }); 
+
+        // React schedules state updates, it doesn't perform them instantly, therefore theoritically 
+        // if you schedule lot of state updates at the same time, you could be depending on the outdated
+        // or incorrect state snapshots if we use the above approach 2. In the below approach, React will
+        // gaurantee that the state snapshot that gives you here in the inner function will always be the
+        // latest snapshot keeping all schedule state updates in mind. This is the safer way to ensure you
+        // are always operating on the latest state snapshot. Use below approach whenever state updates are
+        // dependent on the previous state.
+        setUserInput((prevState) => {
+            return {
+                ...prevState,
+                enteredTitle: event.target.value
+            };
         });
     };
 
