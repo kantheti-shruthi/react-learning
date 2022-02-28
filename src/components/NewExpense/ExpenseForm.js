@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import './ExpenseForm.css';
 
-const ExpenseForm = () => {
-    // const [enteredTitle, setEnteredTitle] = useState('');
-    // const [enteredAmount, setEnteredAmount] = useState('');
-    // const [enteredDate, setEnteredDate] = useState('');
+const ExpenseForm = (props) => {
+    const [enteredTitle, setEnteredTitle] = useState('Enter title');
+    const [enteredAmount, setEnteredAmount] = useState('Enter amount');
+    const [enteredDate, setEnteredDate] = useState('Enter Date');
 
-    const [userInput, setUserInput] = useState({
-        enteredTitle: '',
-        enteredAmount: '',
-        enteredDate: ''
-    });
+    // const [userInput, setUserInput] = useState({
+    //     enteredTitle: '',
+    //     enteredAmount: '',
+    //     enteredDate: ''
+    // });
 
     const titleChangeHandler = (event) => {
         // approach 1
-        // setEnteredTitle(event.target.value); 
+        setEnteredTitle(event.target.value); 
 
         // approach 2
         // setUserInput({
@@ -29,44 +29,61 @@ const ExpenseForm = () => {
         // latest snapshot keeping all schedule state updates in mind. This is the safer way to ensure you
         // are always operating on the latest state snapshot. Use below approach whenever state updates are
         // dependent on the previous state.
-        setUserInput((prevState) => {
-            return {
-                ...prevState,
-                enteredTitle: event.target.value
-            };
-        });
+        // setUserInput((prevState) => {
+        //     return {
+        //         ...prevState,
+        //         enteredTitle: event.target.value
+        //     };
+        // });
     };
 
     const amountChangeHandler = (event) => {
-        // setEnteredAmount(event.target.value);
-        setUserInput({
-            ...userInput,
-            enteredAmount: event.target.value
-        });
+        setEnteredAmount(event.target.value);
+        // setUserInput({
+        //     ...userInput,
+        //     enteredAmount: event.target.value
+        // });
     }
 
     const dateChangeHandler = (event) => {
-        // setEnteredDate(event.target.value);
-        setUserInput({
-            ...userInput,
-            enteredDate: event.target.value
-        });
+        setEnteredDate(event.target.value);
+        // setUserInput({
+        //     ...userInput,
+        //     enteredDate: event.target.value
+        // });
+    };
+
+    const submitHandler = (event) => {
+        event.preventDefault();
+        const expenseData = {
+            title: enteredTitle,
+            amount: enteredAmount,
+            date: new Date(enteredDate)
+        };
+
+        props.onSaveExpenseData(expenseData);
+        setEnteredAmount('');
+        setEnteredTitle('');
+        setEnteredDate('');
     };
 
     return (
-        <form>
+        <form onSubmit={submitHandler}>
             <div className='new-expense__controls'>
                 <div className='new-expense__control'>
                     <label>Title</label>
-                    <input type='text' onChange={titleChangeHandler}/>
+                    <input type='text' value={enteredTitle} 
+                        onChange={titleChangeHandler}/>
                 </div>
                 <div className='new-expense__control'>
                     <label>Amount</label>
-                    <input type='number' min='0.01' step='0.01' onChange={amountChangeHandler}/>
+                    <input type='number' value={enteredAmount} min='0.01' 
+                        step='0.01' onChange={amountChangeHandler}/>
                 </div>
                 <div className='new-expense__control'>
                     <label>Date</label>
-                    <input type='date' min='2019-01-01' max='2022-12-31' onChange={dateChangeHandler}/>
+                    <input type='date' value={enteredDate} min='2019-01-01' 
+                        max='2022-12-31' onChange={dateChangeHandler}/>
                 </div>
             </div>
             <div className='new-expense__actions'>
